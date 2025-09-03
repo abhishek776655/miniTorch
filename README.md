@@ -43,7 +43,7 @@ _A minimal PyTorch-like deep learning framework built from scratch for learning 
 ```bash
 git clone https://github.com/yourusername/minigrad.git
 cd minigrad
-pip install numpy graphviz
+pip install numpy
 ```
 
 🔍 Visualizing the Computation Graph
@@ -52,24 +52,29 @@ from minigrad.torch.utils import build_graph
 
 ## Example: simple computation
 
+```bash
 a = Tensor([2.0], requires_grad=True)
 b = Tensor([3.0], requires_grad=True)
 c = a \* b + a
 d = c.exp()
+```
 
 ## Build and save graph
 
-```bash
+To view graph you need following installation
 
-dot = build_graph(d)
-dot.render("graph", format="png")  # saves graph.png
+```bash
+pip install graphviz matplotlib
 ```
 
-Output graph example:
+code for saving and preview graph
+here out is the name of output tensor
 
-a ----\
- Mul ---> c ----> Exp ---> d
-b ----/
+```bash
+
+dot = build_graph(out)
+dot.render("graph", format="png")  # saves graph.png
+```
 
 ## 🎯 Learning Goals
 
