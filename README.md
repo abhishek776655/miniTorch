@@ -1,4 +1,4 @@
-# 🧠 MiniGrad
+# 🧠 MiniTorch
 
 _A minimal PyTorch-like deep learning framework built from scratch for learning purposes._
 
@@ -41,7 +41,7 @@ _A minimal PyTorch-like deep learning framework built from scratch for learning 
 ## 🛠️ Installation
 
 ```bash
-git clone https://github.com/yourusername/minigrad.git
+git clone https://github.com/abhishek776655/miniTorch.git
 cd minigrad
 pip install numpy
 ```
