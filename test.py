@@ -1,19 +1,37 @@
 from minigrad.tensor import Tensor
-from minigrad.torch.build_graph import trace,draw_dot
-from minigrad.torch import functional as F
+from minigrad.build_graph import trace,draw_dot
+from nn import functional as F
+from nn.layers.linear import Linear
+from nn.layers.relu import ReLU
+from nn.layers.dropout import Dropout
+from nn.layers.sequential import Sequential
+from nn.optimizers.sgd import SGD
+from nn.module import Module
+from examples.MCP import MLP, train_mcp
+import numpy as np
 
 # Test basic operators
-a = Tensor([1, 2, 3], requires_grad=True)
-b = Tensor([4, 5, 6], requires_grad=True)
-e = Tensor([7, 5, 6], requires_grad=True)
+# x = Tensor([[1., 2.],
+#             [3., 4.]], requires_grad=True)
 
-# Multiplication test with backprop
-c = a * b
-
-d = c + b
-f = d * e
-g = F.relu(f)
-h = F.sigmoid(g)
-h.backward(Tensor([1., 1., 1.]))
+# y = Tensor([10., 20.], requires_grad=True)
+# c =x + y
+# c.backward(Tensor([1., 1.],[1., 1.]))
 # Display the computational graph
-dot =  draw_dot(h)
+# dot =  draw_dot(c)
+
+# Define a simple MLP
+
+train_mcp()
+
+# Visualize the computational graph
+model = MLP()
+x = Tensor(np.array([[0,0],[0,1],[1,0],[1,1]], dtype=np.float32))
+y = Tensor(np.array([[0],[1],[1],[0]], dtype=np.float32))
+out = model(x)
+loss = F.sum(((out - y) ** 2))  # MSE loss
+model.zero_grad()
+loss.backward()
+dot = draw_dot(loss)
+
+

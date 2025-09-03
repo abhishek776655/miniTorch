@@ -1,6 +1,6 @@
-from minigrad.torch.ops.activations import Sigmoid, Tanh, Relu
-from minigrad.torch.ops.unary import Exp, Log, Sqrt, Square
-from minigrad.torch.ops.reduction import Sum, Mean, Max, Min
+from minigrad.ops.activations import Sigmoid, Tanh, Relu
+from minigrad.ops.unary import Exp, Log, Sqrt, Square
+from minigrad.ops.reduction import Sum, Mean, Max, Min
 from minigrad.tensor import Tensor
 
 def sigmoid(t: Tensor) -> Tensor:
@@ -45,3 +45,11 @@ def max(t: Tensor) -> Tensor:
 
 def min(t: Tensor) -> Tensor:
     return Min.apply(t)
+
+# ----- NN Layers Functions API -------
+
+def linear(input: Tensor, weight: Tensor, bias: Tensor = None) -> Tensor:
+    out = input @ weight
+    if bias is not None:
+        out = out + bias
+    return out

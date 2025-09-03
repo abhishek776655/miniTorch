@@ -16,6 +16,16 @@ class OpsFunction:
     def backward(ctx, *grad_outputs):
         raise NotImplementedError
     
+    @staticmethod
+    def unbroadcast(grad, shape):
+        """Sum grad to match the given shape (undo numpy broadcasting)."""
+        while len(grad.shape) > len(shape):
+            grad = grad.sum(axis=0)
+        for i, dim in enumerate(shape):
+            if dim == 1:
+                grad = grad.sum(axis=i, keepdims=True)
+        return grad
+        
     @classmethod
     def apply(cls, *tensors):
         from minigrad.tensor import Tensor 
