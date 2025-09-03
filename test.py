@@ -1,19 +1,17 @@
 from minigrad.tensor import Tensor
+from minigrad.torch.build_graph import trace,draw_dot
+
 
 # Test basic operators
-a = Tensor([1, 2, 3])
-b = Tensor([4, 5, 6])
+a = Tensor([1, 2, 3], requires_grad=True)
+b = Tensor([4, 5, 6], requires_grad=True)
+e = Tensor([7, 5, 6], requires_grad=True)
 
-print("a:", a)
-print("b:", b)
+# Multiplication test with backprop
+c = a * b
 
-print("a + b =", a + b)
-print("a - b =", a - b)
-print("a * b =", a * b)
-print("a / b =", a / b)
-
-# Test matrix multiplication
-x = Tensor([[1, 2], [3, 4]])
-y = Tensor([[5, 6], [7, 8]])
-print("x @ y =", x @ y)
-
+d = c + b
+f = d * e
+f.backward(Tensor([1., 1., 1.]))
+# Display the computational graph
+dot =  draw_dot(f)
