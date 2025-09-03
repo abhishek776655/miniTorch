@@ -21,21 +21,27 @@ class Tensor():
     def __eq__(self, other):
         return self is other
     
+     # --- Helpers ---
+    @staticmethod
+    def ensure_tensor(x):
+        if isinstance(x, Tensor): return x
+        return Tensor(x, requires_grad=False)
+    
     # basic arithmetic operations
     def __add__(self, other):
-        return Add.apply(self, other)
+        return Add.apply(self, Tensor.ensure_tensor(other))
 
     def __sub__(self, other):
-        return Sub.apply(self, other)
+        return Sub.apply(self, Tensor.ensure_tensor(other))
 
     def __mul__(self, other):
-        return Mul.apply(self, other)
+        return Mul.apply(self, Tensor.ensure_tensor(other))
 
     def __truediv__(self, other):
-        return Div.apply(self, other)
+        return Div.apply(self, Tensor.ensure_tensor(other))
 
     def __matmul__(self, other):
-        return MatMul.apply(self, other)
+        return MatMul.apply(self, Tensor.ensure_tensor(other))
         
     def __neg__(self):
         return Neg.apply(self)
@@ -46,6 +52,18 @@ class Tensor():
     def exp(self):
         return Exp.apply(self)
     
+    def __radd__(self, other):
+        return self.__add__(other)
+
+    def __rsub__(self, other):
+        return Tensor(other).__sub__(self)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __rtruediv__(self, other):
+        return Tensor(other).__truediv__(self)
+        
     def backward(self, grad=None):
         if self.requires_grad is False:
             return
@@ -58,6 +76,12 @@ class Tensor():
             grad = grad.data
         
         topo = topo_sort(self)
+        
+        if self.grad is None:
+            self.grad = Tensor(grad)
+        else:
+            self.grad = Tensor(self.grad.data + grad)
+            
         for t in reversed(topo):
             if t._ctx:
                 cls, ctx, inputs  = t._ctx

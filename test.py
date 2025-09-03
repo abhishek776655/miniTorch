@@ -1,6 +1,6 @@
 from minigrad.tensor import Tensor
 from minigrad.torch.build_graph import trace,draw_dot
-
+from minigrad.torch import functional as F
 
 # Test basic operators
 a = Tensor([1, 2, 3], requires_grad=True)
@@ -12,6 +12,8 @@ c = a * b
 
 d = c + b
 f = d * e
-f.backward(Tensor([1., 1., 1.]))
+g = F.relu(f)
+h = F.sigmoid(g)
+h.backward(Tensor([1., 1., 1.]))
 # Display the computational graph
-dot =  draw_dot(f)
+dot =  draw_dot(h)
