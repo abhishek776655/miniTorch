@@ -71,8 +71,8 @@ code for saving and preview graph
 here out is the name of output tensor
 
 ```bash
-
-dot = build_graph(out)
+from miniTorch.minigrad.build_graph import draw_dot
+dot = draw_dot(out)
 dot.render("graph", format="png")  # saves graph.png
 ```
 
